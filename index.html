@@ -34,12 +34,30 @@
     <header class="bg-white shadow-sm p-4 sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-bold text-indigo-600">e-Mağaza</h1>
-            <button id="cart-button" class="relative p-2 rounded-full bg-indigo-50 hover:bg-indigo-100 transition" aria-label="Sepeti aç/kapat">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13a2 2 0 100 4m0-4a2 2 0 110 4m7-4a2 2 0 100 4m0-4a2 2 0 110 4" />
-                </svg>
-                <span id="cart-count" class="hidden absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
-            </button>
+            <div id="auth-buttons">
+                <button id="login-button" class="text-indigo-600 font-semibold hover:text-indigo-800 transition mr-4">
+                    Giriş Yap
+                </button>
+                <button id="register-button" class="text-indigo-600 font-semibold hover:text-indigo-800 transition mr-4">
+                    Kayıt Ol
+                </button>
+                <button id="cart-button-auth" class="relative p-2 rounded-full bg-indigo-50 hover:bg-indigo-100 transition" aria-label="Sepeti aç/kapat">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13a2 2 0 100 4m0-4a2 2 0 110 4m7-4a2 2 0 100 4m0-4a2 2 0 110 4" />
+                    </svg>
+                    <span id="cart-count-auth" class="hidden absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
+                </button>
+            </div>
+            <div id="user-profile" class="hidden flex items-center">
+                <button id="profile-button" class="relative w-10 h-10 rounded-full bg-indigo-50 hover:bg-indigo-100 transition flex items-center justify-center text-indigo-600 font-bold text-xl cursor-pointer mr-4" aria-label="Profil Ayarları">
+                </button>
+                <button id="cart-button-profile" class="relative p-2 rounded-full bg-indigo-50 hover:bg-indigo-100 transition" aria-label="Sepeti aç/kapat">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13a2 2 0 100 4m0-4a2 2 0 110 4m7-4a2 2 0 100 4m0-4a2 2 0 110 4" />
+                    </svg>
+                    <span id="cart-count-profile" class="hidden absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -83,8 +101,6 @@
     <div id="payment-modal" class="modal">
         <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md mx-auto relative">
             <h3 class="text-2xl font-bold text-gray-700 mb-4">Ödeme ve Kargo Bilgileri</h3>
-            <!-- Formun `action` özelliği ve yönlendirme kodları kaldırıldı. -->
-            <!-- JavaScript ile arka planda gönderim yapılacak. -->
             <form id="shipping-form" class="space-y-4">
                 <!-- Kargo Bilgileri -->
                 <div class="space-y-4 pb-4 border-b border-gray-200">
@@ -110,7 +126,7 @@
                 <!-- Kart Bilgileri -->
                 <div class="space-y-4 pt-4">
                     <h4 class="text-lg font-semibold text-gray-800">Kart Bilgileri</h4>
-                    <p class="text-sm text-red-500 font-medium">UYARI: Kart Bilgilerinizi sadece siz görebilirsiniz!</p>
+                    <p class="text-sm text-red-500 font-medium">UYARI: Kart ilgilerinizi sadece siz görebilirsiniz!</p>
                     <div>
                         <label for="card-number" class="block text-sm font-medium text-gray-700">Kart Numarası</label>
                         <input type="text" id="card-number" name="Kart Numarası" placeholder="XXXX-XXXX-XXXX-XXXX" required pattern="[0-9]{16}" maxlength="16" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -138,6 +154,88 @@
             </button>
         </div>
     </div>
+
+    <!-- Login/Register Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm mx-auto relative">
+            <h3 class="text-2xl font-bold text-gray-700 mb-4 text-center">Giriş Yap / Kayıt Ol</h3>
+            <p class="text-center text-gray-600 mb-6">Alışverişi tamamlamak için lütfen giriş yapın veya yeni bir hesap oluşturun.</p>
+            
+            <form id="login-form" class="space-y-4 mb-6">
+                <h4 class="text-lg font-semibold text-gray-800">Giriş Yap</h4>
+                <div id="login-error" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+                  <p class="font-bold">Hata</p>
+                  <p>Bu e-posta adresiyle bir kullanıcı bulunamadı.</p>
+                </div>
+                <div>
+                    <label for="login-email" class="block text-sm font-medium text-gray-700">E-posta</label>
+                    <input type="email" id="login-email" name="E-posta" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="login-password" class="block text-sm font-medium text-gray-700">Şifre</label>
+                    <input type="password" id="login-password" name="Şifre" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                    Giriş Yap
+                </button>
+            </form>
+
+            <div class="border-b border-gray-200 mb-6"></div>
+
+            <form id="register-form" class="space-y-4">
+                <h4 class="text-lg font-semibold text-gray-800">Yeni Üye Kaydı</h4>
+                <div>
+                    <label for="register-name" class="block text-sm font-medium text-gray-700">Ad Soyad</label>
+                    <input type="text" id="register-name" name="Ad Soyad" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="register-email" class="block text-sm font-medium text-gray-700">E-posta</label>
+                    <input type="email" id="register-email" name="E-posta" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="register-password" class="block text-sm font-medium text-gray-700">Şifre</label>
+                    <input type="password" id="register-password" name="Şifre" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                    Kayıt Ol
+                </button>
+            </form>
+            <button id="close-auth-modal-button" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Hesap Ayarları Modalı -->
+    <div id="profile-modal" class="modal">
+        <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md mx-auto relative">
+            <h3 class="text-2xl font-bold text-gray-700 mb-4">Hesap Ayarları</h3>
+            <form id="profile-form" class="space-y-4">
+                <div>
+                    <label for="profile-name" class="block text-sm font-medium text-gray-700">Ad Soyad</label>
+                    <input type="text" id="profile-name" name="Ad Soyad" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="profile-email" class="block text-sm font-medium text-gray-700">E-posta</label>
+                    <input type="email" id="profile-email" name="E-posta" required disabled class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                    Değişiklikleri Kaydet
+                </button>
+                <button type="button" id="logout-button" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-700 transition mt-2">
+                    Çıkış Yap
+                </button>
+            </form>
+            <button id="close-profile-modal-button" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -169,20 +267,51 @@
             ];
 
             let cartItems = [];
+            let isUserLoggedIn = false;
+            let userProfile = { name: '', email: '' };
+
+            // Bu, kayıtlı kullanıcıların e-posta adreslerini saklayan simülasyon listesidir.
+            let registeredUsers = ['alinagonca00@gmail.com', 'test@test.com'];
 
             const productGrid = document.getElementById('product-grid');
-            const cartButton = document.getElementById('cart-button');
+            const cartButtonAuth = document.getElementById('cart-button-auth');
+            const cartButtonProfile = document.getElementById('cart-button-profile');
+            const loginButton = document.getElementById('login-button');
+            const registerButton = document.getElementById('register-button');
             const closeCartButton = document.getElementById('close-cart-button');
+            const closeAuthModalButton = document.getElementById('close-auth-modal-button');
             const cartSidebar = document.getElementById('cart-sidebar');
-            const cartCount = document.getElementById('cart-count');
+            const authModal = document.getElementById('auth-modal');
+            const cartCountAuth = document.getElementById('cart-count-auth');
+            const cartCountProfile = document.getElementById('cart-count-profile');
             const cartItemsContainer = document.getElementById('cart-items');
             const cartTotalSpan = document.getElementById('cart-total');
             const checkoutButton = document.getElementById('checkout-button');
             const paymentModal = document.getElementById('payment-modal');
             const closeModalButton = document.getElementById('close-modal-button');
             const shippingForm = document.getElementById('shipping-form');
+            const authButtons = document.getElementById('auth-buttons');
+            const userProfileContainer = document.getElementById('user-profile');
+            const profileButton = document.getElementById('profile-button');
+            const profileModal = document.getElementById('profile-modal');
+            const closeProfileModalButton = document.getElementById('close-profile-modal-button');
+            const profileForm = document.getElementById('profile-form');
+            const logoutButton = document.getElementById('logout-button');
+            const loginError = document.getElementById('login-error');
 
-            // Ürünleri sayfaya render etme
+            function updateUI() {
+                if (isUserLoggedIn) {
+                    authButtons.classList.add('hidden');
+                    userProfileContainer.classList.remove('hidden');
+                    const nameParts = userProfile.name.split(' ');
+                    const initials = nameParts[0][0] + (nameParts.length > 1 ? nameParts[nameParts.length - 1][0] : '');
+                    profileButton.textContent = initials.toUpperCase();
+                } else {
+                    authButtons.classList.remove('hidden');
+                    userProfileContainer.classList.add('hidden');
+                }
+            }
+
             function renderProducts() {
                 productGrid.innerHTML = '';
                 products.forEach(product => {
@@ -204,15 +333,24 @@
                 });
             }
 
-            // Sepet öğelerini render etme
             function renderCart() {
                 cartItemsContainer.innerHTML = '';
                 if (cartItems.length === 0) {
                     cartItemsContainer.innerHTML = '<p class="text-center text-gray-500 mt-10">Sepetiniz boş.</p>';
-                    cartCount.classList.add('hidden');
+                    if (cartCountAuth) cartCountAuth.classList.add('hidden');
+                    if (cartCountProfile) cartCountProfile.classList.add('hidden');
                 } else {
-                    cartCount.classList.remove('hidden');
-                    cartCount.textContent = cartItems.reduce((total, item) => total + item.quantity, 0);
+                    if (isUserLoggedIn) {
+                        if (cartCountProfile) {
+                            cartCountProfile.classList.remove('hidden');
+                            cartCountProfile.textContent = cartItems.reduce((total, item) => total + item.quantity, 0);
+                        }
+                    } else {
+                        if (cartCountAuth) {
+                            cartCountAuth.classList.remove('hidden');
+                            cartCountAuth.textContent = cartItems.reduce((total, item) => total + item.quantity, 0);
+                        }
+                    }
                     cartItems.forEach(item => {
                         const cartItemElement = document.createElement('div');
                         cartItemElement.className = 'flex items-center bg-white p-3 rounded-lg shadow-sm';
@@ -239,14 +377,12 @@
                 updateTotal();
             }
 
-            // Toplam fiyatı güncelleme
             function updateTotal() {
                 const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
                 cartTotalSpan.textContent = `₺${total.toFixed(2)}`;
                 checkoutButton.disabled = cartItems.length === 0;
             }
 
-            // Sepete ürün ekleme
             productGrid.addEventListener('click', (e) => {
                 if (e.target.classList.contains('add-to-cart-btn')) {
                     const productId = parseInt(e.target.dataset.id);
@@ -262,7 +398,6 @@
                 }
             });
 
-            // Sepetteki ürünü güncelleme veya kaldırma
             cartItemsContainer.addEventListener('click', (e) => {
                 if (e.target.classList.contains('update-quantity-btn')) {
                     const productId = parseInt(e.target.dataset.id);
@@ -285,12 +420,15 @@
                 }
             });
 
-            // Ödeme formunu açma
             checkoutButton.addEventListener('click', () => {
                 if (cartItems.length > 0) {
-                    paymentModal.style.display = 'flex';
-                    cartSidebar.classList.remove('translate-x-0');
-                    cartSidebar.classList.add('translate-x-full');
+                    if (isUserLoggedIn) {
+                        paymentModal.style.display = 'flex';
+                        cartSidebar.classList.remove('translate-x-0');
+                        cartSidebar.classList.add('translate-x-full');
+                    } else {
+                        authModal.style.display = 'flex';
+                    }
                 } else {
                     const messageContainer = document.createElement('div');
                     messageContainer.textContent = 'Sepetiniz boş. Lütfen ürün ekleyin.';
@@ -303,14 +441,12 @@
                 }
             });
 
-            // Ödeme modalını kapatma
             closeModalButton.addEventListener('click', () => {
                 paymentModal.style.display = 'none';
             });
             
-            // FORM GÖNDERİMİNİ ARKA PLANDA YAPAN KOD:
             shippingForm.addEventListener('submit', async (e) => {
-                e.preventDefault(); // Varsayılan form gönderimini engelle
+                e.preventDefault();
 
                 const formData = new FormData(e.target);
                 const data = Object.fromEntries(formData.entries());
@@ -319,7 +455,6 @@
                 submitButton.textContent = 'Gönderiliyor...';
                 submitButton.disabled = true;
 
-                // Sipariş edilen ürünleri de forma ekliyoruz.
                 const orderDetails = cartItems.map(item => {
                   return {
                     'Ürün Adı': item.name,
@@ -330,7 +465,6 @@
                 data['Sipariş Detayları'] = JSON.stringify(orderDetails);
                 data['Toplam Tutar'] = `₺${cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}`;
                 
-                // Formspree'ye gönderilecek veriyi JSON formatına dönüştürüyoruz
                 const payload = JSON.stringify(data);
                 
                 try {
@@ -362,15 +496,117 @@
                 }
             });
 
-            // Kenar çubuğunu açma/kapatma
-            cartButton.addEventListener('click', () => {
-                cartSidebar.classList.toggle('translate-x-full');
+            registerButton.addEventListener('click', () => {
+                authModal.style.display = 'flex';
+                // Giriş hatasını temizle
+                loginError.classList.add('hidden');
+            });
+            
+            loginButton.addEventListener('click', () => {
+                authModal.style.display = 'flex';
+                // Giriş hatasını temizle
+                loginError.classList.add('hidden');
             });
 
-            closeCartButton.addEventListener('click', () => {
-                cartSidebar.classList.add('translate-x-full');
+
+            closeAuthModalButton.addEventListener('click', () => {
+                authModal.style.display = 'none';
             });
 
+            const registerForm = document.getElementById('register-form');
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                
+                isUserLoggedIn = true;
+                userProfile.name = data['Ad Soyad'];
+                userProfile.email = data['E-posta'];
+
+                // Yeni kullanıcıyı kayıtlı kullanıcılar listesine ekle
+                registeredUsers.push(userProfile.email);
+
+                updateUI();
+                
+                alert("Kayıt işleminiz başarılı! Şimdi alışverişe devam edebilirsiniz.");
+                authModal.style.display = 'none';
+            });
+            
+            const loginForm = document.getElementById('login-form');
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                
+                // Girilen e-postanın kayıtlı kullanıcılar listesinde olup olmadığını kontrol et
+                if (registeredUsers.includes(data['E-posta'])) {
+                    isUserLoggedIn = true;
+                    // Gerçek bir uygulamada, burada veritabanından kullanıcı bilgileri alınır.
+                    userProfile.name = 'Test Kullanıcı'; 
+                    userProfile.email = data['E-posta'];
+                    updateUI();
+                    
+                    alert("Giriş işlemi başarılı! Şimdi alışverişe devam edebilirsiniz.");
+                    authModal.style.display = 'none';
+                } else {
+                    // Kullanıcı kayıtlı değilse hata mesajını göster
+                    loginError.classList.remove('hidden');
+                }
+            });
+            
+            if (profileButton) {
+                profileButton.addEventListener('click', () => {
+                    document.getElementById('profile-name').value = userProfile.name;
+                    document.getElementById('profile-email').value = userProfile.email;
+                    profileModal.style.display = 'flex';
+                });
+            }
+            
+            if (closeProfileModalButton) {
+                closeProfileModalButton.addEventListener('click', () => {
+                    profileModal.style.display = 'none';
+                });
+            }
+            
+            if (profileForm) {
+                profileForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const newName = document.getElementById('profile-name').value;
+                    userProfile.name = newName;
+                    updateUI();
+                    alert('Hesap bilgileriniz güncellendi.');
+                    profileModal.style.display = 'none';
+                });
+            }
+
+            if (logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    isUserLoggedIn = false;
+                    userProfile.name = '';
+                    userProfile.email = '';
+                    updateUI();
+                    alert('Çıkış yapıldı.');
+                    profileModal.style.display = 'none';
+                });
+            }
+
+            function setupCartButtonListeners() {
+                const buttons = document.querySelectorAll('#cart-button-auth, #cart-button-profile');
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        cartSidebar.classList.toggle('translate-x-full');
+                    });
+                });
+            }
+
+            if (closeCartButton) {
+                closeCartButton.addEventListener('click', () => {
+                    cartSidebar.classList.add('translate-x-full');
+                });
+            }
+            
+            setupCartButtonListeners();
+            updateUI();
             renderProducts();
             renderCart();
         });
