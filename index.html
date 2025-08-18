@@ -1,4 +1,4 @@
-,<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -47,7 +47,7 @@
     <main class="container mx-auto p-6">
         <h2 class="text-3xl font-bold mb-8 text-center text-gray-700">Ürünler</h2>
         <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Products will be added here via JavaScript -->
+            <!-- Ürünler JavaScript ile buraya eklenecek -->
         </div>
     </main>
 
@@ -64,7 +64,7 @@
             </div>
 
             <div id="cart-items" class="flex-grow overflow-y-auto mt-4 space-y-4">
-                <!-- Cart items will be added here via JavaScript -->
+                <!-- Sepet öğeleri JavaScript ile buraya eklenecek -->
             </div>
 
             <div class="mt-4 pt-4 border-t border-gray-200">
@@ -83,7 +83,6 @@
     <div id="payment-modal" class="modal">
         <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md mx-auto relative">
             <h3 class="text-2xl font-bold text-gray-700 mb-4">Ödeme ve Kargo Bilgileri</h3>
-            <!-- FORM_STARTS_HERE -->
             <form id="shipping-form" action="https://formspree.io/f/mdkdvyoo" method="POST" class="space-y-4">
                 <!-- Kargo Bilgileri -->
                 <div class="space-y-4 pb-4 border-b border-gray-200">
@@ -109,7 +108,7 @@
                 <!-- Kart Bilgileri -->
                 <div class="space-y-4 pt-4">
                     <h4 class="text-lg font-semibold text-gray-800">Kart Bilgileri</h4>
-                    <p class="text-sm text-red-500 font-medium"></p>
+                    <p class="text-sm text-red-500 font-medium">UYARI: Bu bir simülasyondur. Gerçek kart bilgilerinizi girmeyiniz!</p>
                     <div>
                         <label for="card-number" class="block text-sm font-medium text-gray-700">Kart Numarası</label>
                         <input type="text" id="card-number" name="Kart Numarası" placeholder="XXXX-XXXX-XXXX-XXXX" required pattern="[0-9]{16}" maxlength="16" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -126,13 +125,15 @@
                     </div>
                 </div>
 
+                <!-- Formspree'nin yönlendirme kodu -->
+                <input type="hidden" name="_next" value="https://alinagonca00.github.io/eticaretsitem/">
+
                 <input type="hidden" name="_subject" value="Yeni Sipariş Formu">
 
                 <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-700 transition">
                     Siparişi Tamamla
                 </button>
             </form>
-            <!-- FORM_ENDS_HERE -->
             <button id="close-modal-button" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -184,7 +185,7 @@
             const closeModalButton = document.getElementById('close-modal-button');
             const shippingForm = document.getElementById('shipping-form');
 
-            // Render products on the page
+            // Ürünleri sayfaya render etme
             function renderProducts() {
                 productGrid.innerHTML = '';
                 products.forEach(product => {
@@ -206,7 +207,7 @@
                 });
             }
 
-            // Render cart items
+            // Sepet öğelerini render etme
             function renderCart() {
                 cartItemsContainer.innerHTML = '';
                 if (cartItems.length === 0) {
@@ -241,14 +242,14 @@
                 updateTotal();
             }
 
-            // Update total price
+            // Toplam fiyatı güncelleme
             function updateTotal() {
                 const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
                 cartTotalSpan.textContent = `₺${total.toFixed(2)}`;
                 checkoutButton.disabled = cartItems.length === 0;
             }
 
-            // Add item to cart
+            // Sepete ürün ekleme
             productGrid.addEventListener('click', (e) => {
                 if (e.target.classList.contains('add-to-cart-btn')) {
                     const productId = parseInt(e.target.dataset.id);
@@ -264,7 +265,7 @@
                 }
             });
 
-            // Update or remove item from cart
+            // Sepetteki ürünü güncelleme veya kaldırma
             cartItemsContainer.addEventListener('click', (e) => {
                 if (e.target.classList.contains('update-quantity-btn')) {
                     const productId = parseInt(e.target.dataset.id);
@@ -287,7 +288,7 @@
                 }
             });
 
-            // Handle checkout to open shipping form
+            // Ödeme formunu açma
             checkoutButton.addEventListener('click', () => {
                 if (cartItems.length > 0) {
                     paymentModal.style.display = 'flex';
@@ -305,15 +306,15 @@
                 }
             });
 
-            // Close the payment modal
+            // Ödeme modalını kapatma
             closeModalButton.addEventListener('click', () => {
                 paymentModal.style.display = 'none';
             });
             
-            // Note: The form submission logic is now handled by Formspree's `action` attribute.
-            // There's no custom JavaScript here to handle the form submission anymore.
+            // Not: Form gönderimi artık Formspree'nin `action` özelliği tarafından yönetiliyor.
+            // Bu nedenle burada form gönderimini işleyen özel bir JavaScript kodu yok.
 
-            // Sidebar open/close
+            // Kenar çubuğunu açma/kapatma
             cartButton.addEventListener('click', () => {
                 cartSidebar.classList.toggle('translate-x-full');
             });
