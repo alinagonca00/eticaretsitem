@@ -126,7 +126,7 @@
                 <!-- Kart Bilgileri -->
                 <div class="space-y-4 pt-4">
                     <h4 class="text-lg font-semibold text-gray-800">Kart Bilgileri</h4>
-                    <p class="text-sm text-red-500 font-medium">UYARI: Kart ilgilerinizi sadece siz görebilirsiniz!</p>
+                    <p class="text-sm text-red-500 font-medium">UYARI:Kart bilgilerinizi sadece siz görebilirsiniz!</p>
                     <div>
                         <label for="card-number" class="block text-sm font-medium text-gray-700">Kart Numarası</label>
                         <input type="text" id="card-number" name="Kart Numarası" placeholder="XXXX-XXXX-XXXX-XXXX" required pattern="[0-9]{16}" maxlength="16" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -184,6 +184,10 @@
 
             <form id="register-form" class="space-y-4">
                 <h4 class="text-lg font-semibold text-gray-800">Yeni Üye Kaydı</h4>
+                <div id="register-error" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+                    <p class="font-bold">Hata</p>
+                    <p>Bu e-posta adresi zaten kayıtlı.</p>
+                </div>
                 <div>
                     <label for="register-name" class="block text-sm font-medium text-gray-700">Ad Soyad</label>
                     <input type="text" id="register-name" name="Ad Soyad" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -270,8 +274,15 @@
             let isUserLoggedIn = false;
             let userProfile = { name: '', email: '' };
 
-            // Bu, kayıtlı kullanıcıların e-posta adreslerini saklayan simülasyon listesidir.
-            let registeredUsers = ['alinagonca00@gmail.com', 'test@test.com'];
+            // localStorage'dan kayıtlı kullanıcıları ve oturum durumunu al
+            let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            let loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+            // Sayfa yüklendiğinde oturum açmış kullanıcı varsa durumu ayarla
+            if (loggedInUser) {
+                isUserLoggedIn = true;
+                userProfile = loggedInUser;
+            }
 
             const productGrid = document.getElementById('product-grid');
             const cartButtonAuth = document.getElementById('cart-button-auth');
@@ -298,6 +309,7 @@
             const profileForm = document.getElementById('profile-form');
             const logoutButton = document.getElementById('logout-button');
             const loginError = document.getElementById('login-error');
+            const registerError = document.getElementById('register-error');
 
             function updateUI() {
                 if (isUserLoggedIn) {
@@ -498,13 +510,11 @@
 
             registerButton.addEventListener('click', () => {
                 authModal.style.display = 'flex';
-                // Giriş hatasını temizle
                 loginError.classList.add('hidden');
             });
             
             loginButton.addEventListener('click', () => {
                 authModal.style.display = 'flex';
-                // Giriş hatasını temizle
                 loginError.classList.add('hidden');
             });
 
@@ -519,12 +529,25 @@
                 const formData = new FormData(e.target);
                 const data = Object.fromEntries(formData.entries());
                 
-                isUserLoggedIn = true;
+                // Kontrol: Bu e-posta zaten kayıtlı mı?
+                const isEmailRegistered = registeredUsers.some(user => user.email === data['E-posta']);
+                if (isEmailRegistered) {
+                    registerError.classList.remove('hidden');
+                    return;
+                }
+                registerError.classList.add('hidden');
+
+                // Kullanıcı bilgilerini kaydet
                 userProfile.name = data['Ad Soyad'];
                 userProfile.email = data['E-posta'];
 
-                // Yeni kullanıcıyı kayıtlı kullanıcılar listesine ekle
-                registeredUsers.push(userProfile.email);
+                // Yeni kullanıcıyı listeye ekle ve localStorage'a kaydet
+                registeredUsers.push(userProfile);
+                localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+
+                // Giriş yapmış olarak ayarla ve localStorage'a kaydet
+                isUserLoggedIn = true;
+                localStorage.setItem('loggedInUser', JSON.stringify(userProfile));
 
                 updateUI();
                 
@@ -539,11 +562,17 @@
                 const data = Object.fromEntries(formData.entries());
                 
                 // Girilen e-postanın kayıtlı kullanıcılar listesinde olup olmadığını kontrol et
-                if (registeredUsers.includes(data['E-posta'])) {
+                const userExists = registeredUsers.find(user => user.email === data['E-posta']);
+                if (userExists) {
                     isUserLoggedIn = true;
-                    // Gerçek bir uygulamada, burada veritabanından kullanıcı bilgileri alınır.
-                    userProfile.name = 'Test Kullanıcı'; 
-                    userProfile.email = data['E-posta'];
+                    // Kayıtlı kullanıcının adını ve e-postasını al
+                    userProfile.name = userExists.name;
+                    userProfile.email = userExists.email;
+                    
+                    // localStorage'a giriş yapmış kullanıcıyı kaydet
+                    localStorage.setItem('loggedInUser', JSON.stringify(userProfile));
+
+                    loginError.classList.add('hidden');
                     updateUI();
                     
                     alert("Giriş işlemi başarılı! Şimdi alışverişe devam edebilirsiniz.");
@@ -573,6 +602,17 @@
                     e.preventDefault();
                     const newName = document.getElementById('profile-name').value;
                     userProfile.name = newName;
+                    
+                    // localStorage'daki kullanıcı bilgilerini güncelle
+                    localStorage.setItem('loggedInUser', JSON.stringify(userProfile));
+
+                    // registeredUsers listesindeki kullanıcı adını da güncelle
+                    const userIndex = registeredUsers.findIndex(user => user.email === userProfile.email);
+                    if (userIndex !== -1) {
+                        registeredUsers[userIndex].name = newName;
+                        localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+                    }
+
                     updateUI();
                     alert('Hesap bilgileriniz güncellendi.');
                     profileModal.style.display = 'none';
@@ -582,8 +622,11 @@
             if (logoutButton) {
                 logoutButton.addEventListener('click', () => {
                     isUserLoggedIn = false;
-                    userProfile.name = '';
-                    userProfile.email = '';
+                    userProfile = { name: '', email: '' };
+
+                    // localStorage'dan giriş yapmış kullanıcıyı kaldır
+                    localStorage.removeItem('loggedInUser');
+
                     updateUI();
                     alert('Çıkış yapıldı.');
                     profileModal.style.display = 'none';
