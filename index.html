@@ -511,9 +511,8 @@
                   };
                 });
                 
-                // Sipariş bilgilerini userOrders dizisine ekleyip localStorage'a kaydediyoruz
                 userOrders.push({
-                    orderId: Date.now(), // Basit bir benzersiz ID
+                    orderId: Date.now(),
                     userEmail: userProfile.email,
                     items: orderDetails,
                     total: cartTotalSpan.textContent,
@@ -629,7 +628,6 @@
                 }
             });
             
-            // Profil ayarları modalını açma
             if (userInfoButton) {
                 userInfoButton.addEventListener('click', () => {
                     document.getElementById('profile-name').value = userProfile.name;
@@ -638,7 +636,6 @@
                 });
             }
 
-            // Siparişlerim modalını açma
             if (ordersButton) {
                 ordersButton.addEventListener('click', () => {
                     renderOrders();
@@ -646,21 +643,18 @@
                 });
             }
             
-            // Profil ayarları modalını kapatma
             if (closeProfileModalButton) {
                 closeProfileModalButton.addEventListener('click', () => {
                     profileModal.style.display = 'none';
                 });
             }
 
-            // Siparişlerim modalını kapatma
             if (closeOrdersModalButton) {
                 closeOrdersModalButton.addEventListener('click', () => {
                     ordersModal.style.display = 'none';
                 });
             }
             
-            // Hesap ayarlarını güncelleme
             if (profileForm) {
                 profileForm.addEventListener('submit', (e) => {
                     e.preventDefault();
@@ -681,7 +675,6 @@
                 });
             }
 
-            // Çıkış yapma
             if (logoutButton) {
                 logoutButton.addEventListener('click', () => {
                     isUserLoggedIn = false;
@@ -695,7 +688,6 @@
                 });
             }
 
-            // Siparişleri render etme
             function renderOrders() {
                 ordersList.innerHTML = '';
                 const userOrdersFiltered = userOrders.filter(order => order.userEmail === userProfile.email);
@@ -709,7 +701,9 @@
                     const orderElement = document.createElement('div');
                     orderElement.className = 'bg-gray-100 p-4 rounded-lg shadow-sm';
                     
-                    const itemsHtml = JSON.parse(order.items).map(item => `
+                    // JSON.parse hatasını çözmek için `items` verisinin zaten dizi/nesne olduğunu varsayıyoruz
+                    // ve JSON.parse kullanmıyoruz.
+                    const itemsHtml = order.items.map(item => `
                         <li class="text-gray-700">${item['Ürün Adı']} - Adet: ${item['Adet']}</li>
                     `).join('');
 
